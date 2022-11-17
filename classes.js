@@ -14,7 +14,7 @@ export var Classes = [
         Subject: 'Maths',
         Location: 'Essex',
         Price: 95.00,
-        Spaces: 6
+        Spaces: 5
     },
 
     {
@@ -23,7 +23,7 @@ export var Classes = [
         Subject: 'Science', 
         Location: 'Oxford', 
         Price: 60.00, 
-        Spaces: 7
+        Spaces: 5
     },
 
     {
@@ -32,7 +32,7 @@ export var Classes = [
         Subject: 'Music', 
         Location: 'London', 
         Price: 70.00, 
-        Spaces: 8
+        Spaces: 5
     },
 
     {
@@ -41,7 +41,7 @@ export var Classes = [
         Subject: 'Art', 
         Location: 'Oxford', 
         Price: 80.00, 
-        Spaces: 9
+        Spaces: 5
     },
 
     {
@@ -50,6 +50,6 @@ export var Classes = [
         Subject: 'Sport', 
         Location: 'Essex', 
         Price: 50.00, 
-        Spaces: 10
+        Spaces: 5
     },
 ]
