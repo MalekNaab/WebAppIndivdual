@@ -1,0 +1,181 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="Index.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+</head>
+
+<body style="margin-top: 0px; margin-left: 0px; margin-right: 0px; margin-bottom: 0px;">
+    <div id="Box">
+
+        <div id="header">
+            <button id="HomeButton">
+                <img src="img/house-solid.svg" alt="">Home
+            </button>
+            <div id="SearchBar">
+                <input type="text" placeholder="Enter An Item" v-model="searchString">
+            </div>
+            <button v-on:click="showModal = true"  v-bind:disabled="checkoutcount==0" id="CheckoutButton">
+                {{checkoutcount}}
+            </button>
+        </div>
+
+        <div class="Cart-modal-vue">
+            <!-- overlay -->
+            <div class="Cart-overlay" v-if="showModal" @click="showModal = false"></div>
+            <!-- modal -->
+            <div class="Cart-modal" v-if="showModal">
+                <button class="close" v-on:click="showModal = false">x</button>
+                <h1>Cart</h1>
+                <table>
+                    <tr>
+                        <th>Picture</th>
+                        <th>Subject</th>
+                        <th>Location</th>
+                        <th>Price</th>
+                        <th>Remove</th>
+                    </tr>
+                    <tr v-for="(Basket,n) in Basket">
+                        <td><img v-bind:src="Basket.IMAGE"></td>
+                        <td>{{Basket.SUBJECT}}</td>
+                        <td>{{Basket.LOCATION}}</td>
+                        <td>{{Basket.PRICE}}</td>
+                        <td><button v-on:click="RemoveBasket(Product)">X</button></td>
+                    </tr>
+                </table>
+                <div id="Input Checkout">
+                    <h3>Enter Information</h3>
+                    <p>FullName: <input type="text" v-model="FullName"></p>
+                    <p>Phone Number: <input type="number" v-model="PhoneNumber"></p>
+                </div>
+        
+                <div id="Output Checkout">
+                    <h3>Order Information</h3>
+                    <p>First Name: {{FullName}}</p>
+                    <p>Phone Number: {{PhoneNumber}}</p>
+                </div>
+        
+                <div id="Submit">
+                    <button  v-on:click="SubmitForm()" v-bind:disabled="this.FullName == '' || this.PhoneNumber == ' '">
+                        <span v-if="this.FullName == ' ' || this.PhoneNumber == ' '">Enter Details</span>
+                        <span v-else>Checkout</span>
+                    </button>
+                </div>
+                <!-- <a href="Checkout.html"><button v-on:click="showCheckoutModal = true">Checkout</button></a> -->
+            </div>
+        </div>
+
+        <div id="sort-bar">
+            <p>Sort By:</p>
+            <button v-on:click="sortKey = 'Subject'">Subject</button>
+            <button v-on:click="sortKey = 'Location'">Location</button>
+            <button v-on:click="sortKey = 'Price'">price</button>
+            <button v-on:click="sortKey = 'Spaces'">Space</button>
+        </div>
+
+        <div v-for="Product in sortedItems" :key="Product.id">
+            <img v-bind:src="Product.image">
+            <p>Subject: {{Product.Subject}}</p>
+            <p>Location: {{Product.Location}}</p>
+            <p>Price: £{{Product.Price}}</p>
+            <p>Spaces: {{Product.Spaces}}</p>
+            <button v-on:click="AddBasket(Product)" v-bind:disabled="Product.Spaces == 0">
+                <span v-if="Product.Spaces <= 0">Out Of Stock</span>
+                <span v-else>Add to Cart</span>
+            </button>
+        </div>
+    </div>
+
+    <Script>
+
+        let id = 0
+        const StorageKey = "Basket";
+        const { createApp } = Vue
+        createApp({
+            data() {
+                return {
+                    FullName: '',
+                    PhoneNumber: '',
+                    sortKey: '',
+                    searchString: '',
+                    showCheckoutModal: false,
+                    showModal: false,
+                    checkoutcount: 0,
+                    Basket: [],
+                    Products: [
+                        { id: id++, image: "img/English.png", Subject: 'English', Location: 'London', Price: 100.00, Spaces: 5 },
+                        { id: id++, image: "img/Maths.png", Subject: 'Maths', Location: 'Essex', Price: 95.00, Spaces: 6 },
+                        { id: id++, image: "img/Science.png", Subject: 'Science', Location: 'Oxford', Price: 60.00, Spaces: 7 },
+                        { id: id++, image: "img/Music.png", Subject: 'Music', Location: 'London', Price: 70.00, Spaces: 8 },
+                        { id: id++, image: "img/Art.png", Subject: 'Art', Location: 'Oxford', Price: 80.00, Spaces: 9 },
+                        { id: id++, image: "img/Sport.png", Subject: 'Sport', Location: 'Essex', Price: 50.00, Spaces: 10 },
+                    ]
+                }
+            },
+            create() {
+                this.Basket = JSON.parse(localStorage.getItem(StorageKey) || '[]');
+            },
+            computed: {
+                sortedItems: function () {
+                    let searchString = this.searchString;
+                    const sortedArray = this.Products.sort((a, b) => {
+                        if (a[this.sortKey] < b[this.sortKey]) return -1
+                        if (a[this.sortKey] > b[this.sortKey]) return 1
+                        return 0
+                    });
+                    if (!searchString) {
+                        return sortedArray;
+                    } else {
+                        // this line identify and our searcg input letter if uppercase it identify and convert it inro small case
+                        searchString = searchString.trim().toLowerCase();
+                        // here we search work by subject
+                        const search_array = sortedArray.filter((item) => {
+                            if (item.Subject.toLowerCase().indexOf(searchString) !== -1) {
+                                // the final result return
+                                return item;
+                            }
+                        });
+                        return search_array;
+                    }
+                },
+            },
+            methods: {
+                SubmitForm(){
+                    alert('Your Order has Been Submitted!! ' + this.FullName)
+                },
+                AddBasket(Product) {
+                    this.Basket.push({
+                        ID: Product.id,
+                        IMAGE: Product.image,
+                        SUBJECT: Product.Subject,
+                        LOCATION: Product.Location,
+                        PRICE: Product.Price,
+                    }),
+
+                        Product.Spaces--
+                    this.checkoutcount++
+                    if (this.Spaces <= 0) {
+                        this.Spaces = 'Out Of Spaces'
+
+                    }
+
+                    localStorage.setItem(StorageKey, JSON.stringify(this.Basket));
+                },
+                RemoveBasket(Product) {
+                    // Product.Spaces++
+                    this.checkoutcount--
+                    this.Basket.splice(this.Basket.indexOf(Product), 1)
+                    localStorage.setItem(StorageKey, JSON.stringify(this.Basket));
+                }
+            }
+        }).mount('#Box')
+
+    </Script>
+</body>
+
+</html>
