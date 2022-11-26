@@ -64,8 +64,8 @@
                 </div>
         
                 <div id="Submit">
-                    <button  v-on:click="SubmitForm()" v-bind:disabled="this.FullName == '' || this.PhoneNumber == ' '">
-                        <span v-if="this.FullName == ' ' || this.PhoneNumber == ' '">Enter Details</span>
+                    <button  v-on:click="SubmitForm()" v-bind:disabled="!/^[a-zA-Z ]+$/.test(this.FullName) || !/^\d{10}$/.test(this.PhoneNumber)">
+                        <span v-if="!/^[a-zA-Z ]+$/.test(this.FullName) || !/^\d{10}$/.test(this.PhoneNumber)">Enter Right Details</span>
                         <span v-else>Checkout</span>
                     </button>
                 </div>
@@ -80,6 +80,9 @@
             <button v-on:click="Sorter = 'Location'">Location</button>
             <button v-on:click="Sorter = 'Price'">Price</button>
             <button v-on:click="Sorter = 'Spaces'">Space</button>
+            <p>Ascend/Decend</p>
+            <button v-on:click="Order = 'Ascending'">Ascending</button>
+            <button v-on:click="Order = 'Decending'">Decending</button>
         </div>
 
         <div v-for="(classes,index) in sortedclasses" :key="index">
@@ -108,6 +111,7 @@
                     FullName: '',
                     PhoneNumber: '',
                     Sorter: '',
+                    Order: '',
                     Search: '',
                     showCheckoutModal: false,
                     showModal: false,
@@ -123,13 +127,19 @@
             computed: {
                 sortedclasses: function () {
                     let Search = this.Search;
+                    const Ordering = this.Classes.sort((a, b) => {
+                        if (a[this.Order] > b[this.Order]) return -1
+                        if (a[this.Order] < b[this.Order]) return 1
+                        return 0
+                    });
                     const sortedArray = this.Classes.sort((a, b) => {
                         if (a[this.Sorter] < b[this.Sorter]) return -1
                         if (a[this.Sorter] > b[this.Sorter]) return 1
                         return 0
                     });
                     if (!Search) {
-                        return sortedArray;
+                        return Ordering;
+                        // return sortedArray;
                     } else {
                         Search = Search.trim().toLowerCase();
                         const search_array = sortedArray.filter((item) => {
