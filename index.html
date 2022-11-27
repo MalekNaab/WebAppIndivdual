@@ -81,8 +81,10 @@
             <button v-on:click="Sorter = 'Price'">Price</button>
             <button v-on:click="Sorter = 'Spaces'">Space</button>
             <p>Ascend/Decend</p>
-            <button v-on:click="Order = 'Ascending'">Ascending</button>
-            <button v-on:click="Order = 'Decending'">Decending</button>
+            <button v-on:click="ascending = !ascending" class="btn btn-dark btn-sm col-12">
+                <i v-if="ascending" class="fa fa-sort-up">Descending</i>
+                <i v-else class="fa fa-sort-down">Ascending</i>
+            </button>
         </div>
 
         <div v-for="(classes,index) in sortedclasses" :key="index">
@@ -111,7 +113,7 @@
                     FullName: '',
                     PhoneNumber: '',
                     Sorter: '',
-                    Order: '',
+                    ascending: true,
                     Search: '',
                     showCheckoutModal: false,
                     showModal: false,
@@ -127,19 +129,18 @@
             computed: {
                 sortedclasses: function () {
                     let Search = this.Search;
-                    const Ordering = this.Classes.sort((a, b) => {
-                        if (a[this.Order] > b[this.Order]) return -1
-                        if (a[this.Order] < b[this.Order]) return 1
-                        return 0
-                    });
+
                     const sortedArray = this.Classes.sort((a, b) => {
                         if (a[this.Sorter] < b[this.Sorter]) return -1
                         if (a[this.Sorter] > b[this.Sorter]) return 1
                         return 0
                     });
+                    if (!this.ascending) {
+        	            sortedArray.reverse()
+                    }
                     if (!Search) {
-                        return Ordering;
-                        // return sortedArray;
+                        // return Ordering;
+                        return sortedArray;
                     } else {
                         Search = Search.trim().toLowerCase();
                         const search_array = sortedArray.filter((item) => {
