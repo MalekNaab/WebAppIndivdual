@@ -7,6 +7,7 @@
     <title>Index</title>
     <link rel="stylesheet" href="Index.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 
 </head>
 
@@ -21,6 +22,7 @@
                 <input type="text" placeholder="Enter An Item" v-model="Search">
             </div>
             <button v-on:click="showModal = true"  v-bind:disabled="checkoutcount==0" id="CheckoutButton">
+                <span class="fas fa-cart-plus" class="btn btn-dark"></span>
                 {{checkoutcount}}
             </button>
         </div>
