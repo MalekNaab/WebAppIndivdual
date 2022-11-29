@@ -48,4 +48,36 @@ export var Classes = [
         Price: 50.00, 
         Spaces: 5
     },
+    {
+        id: '1007', 
+        image: "img/Art.png", 
+        Subject: 'Art', 
+        Location: 'Essex', 
+        Price: 80.00, 
+        Spaces: 5
+    },
+    {
+        id: '1008', 
+        image: "img/Sport.png", 
+        Subject: 'Sport', 
+        Location: 'London', 
+        Price: 50.00, 
+        Spaces: 5
+    },
+    {
+        id: '1009', 
+        image: "img/Science.png", 
+        Subject: 'Science', 
+        Location: 'Essex', 
+        Price: 60.00, 
+        Spaces: 5
+    },
+    {
+        id: '1010', 
+        image: "img/English.png", 
+        Subject: 'English', 
+        Location: 'Essex', 
+        Price: 100.00, 
+        Spaces: 5
+    },
 ]
