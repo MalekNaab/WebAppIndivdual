@@ -146,7 +146,7 @@
                     } else {
                         Search = Search.trim().toLowerCase();
                         const search_array = sortedArray.filter((item) => {
-                            if (item.Subject.toLowerCase().indexOf(Search) !== -1) {
+                            if (item.Subject.toLowerCase().indexOf(Search) !== -1 || item.Location.toLowerCase().indexOf(Search) !== -1 ) {
                                 return item;
                             }
                         });
